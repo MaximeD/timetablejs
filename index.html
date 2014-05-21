@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title>Week Planning</title>
+
+    <meta name="description" content="Javascript plugin to create week planning">
+    <meta name="author" content="Maxime Demolin">
+
+    <link rel="shortcut icon" href="favicon.ico">
+
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/week_planning.css">
+
+    <script src="assets/js/jquery-1.11.1.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/week_planning.js"></script>
+
+  </head>
+
+
+  <body>
+    <div class="container">
+      <h1>Week Planning</h1>
+
+      <div id="week_planning" />
+    </div>
+
+    <script>
+      $(document).ready(function() {
+        $( '#week_planning' ).planning({
+          dayNames:   [ "Monday", "Tuesday", "Wednesday", "Thursday", "Friday" ],
+          timelapse:  {
+            start:  12,
+            end:    22
+          },
+          events:     [
+            {
+              name:   "Kung Fu",
+              day:    "01",
+              start:  "10:30",
+              end:    "12:00"
+            }
+          ]
+        });
+      });
+    </script>
+
+  </body>
+
+</html>
