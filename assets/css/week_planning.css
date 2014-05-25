@@ -1,5 +1,5 @@
-tr.hour{
-  height: 50px;
+thead,tr.hour{
+  //height: 50px;
 }
 
 tr.hour td {
@@ -11,13 +11,13 @@ tr.hour td {
 tr.hour td.hour-name {
   vertical-align: middle;
   text-align: center;
+  //width: 80px;
 }
 
-tr.hour td div:nth-child(2n+2) {
+tr.hour td div:nth-child(n+1) {
   border-bottom: 1px solid #ddd;
 }
 
-// TODO find good size
-.minute{
-  height: 14px;
+tr.hour td div:nth-child(n+2) {
+  border-bottom: 1px solid #eee;
 }
