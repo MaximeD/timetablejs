@@ -28,8 +28,8 @@
     </div>
 
     <script>
-      $(document).ready(function() {
-        $( '#week_planning' ).planning({
+      $( document ).ready(function() {
+        new WeekPlanning( '#week_planning', {
           dayNames:   [ "Monday", "Tuesday", "Wednesday", "Thursday", "Friday" ],
           timelapse:  {
             start:  10,
