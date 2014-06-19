@@ -37,6 +37,12 @@
 
   tableTemplate = "<table class=\"table table-bordered\">\n  <thead>\n  </thead>\n  <tbody>\n  </tbody>\n</table>";
 
+  $.fn.toggleEvents = function(eventName) {
+    hideEvents[eventName] = !hideEvents[eventName];
+    $(".event").remove();
+    return drawEvents();
+  };
+
   createPlanning = function() {
     var colMd, day, hour, index, name, planningNodes, td, weekDaysLength, _i, _j, _len, _len1;
     planningNodes = $('#week_planning');

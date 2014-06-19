@@ -25,6 +25,12 @@ tableTemplate = """
 </table>
 """
 
+$.fn.toggleEvents = ( eventName ) ->
+  hideEvents[ eventName ] = !hideEvents[ eventName ]
+  $( ".event" ).remove()
+  drawEvents()
+
+
 createPlanning = ->
   planningNodes = $( '#week_planning' )
 
