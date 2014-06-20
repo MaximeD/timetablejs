@@ -1,97 +1,93 @@
-weekDays  = [ "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi" ]
-hourRange = [ 7..19 ]
-events    = []
+class window.WeekPlanning
+  @_tableTemplate = """
+  <table class="table table-bordered">
+    <thead>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+  """
 
-table      = null
-tableHead  = null
-tableBody  = null
-cell       = null
-hideEvents = {}
+  constructor: ( @node, options = {} ) ->
+    unless @node?
+      throw new Error( "Don't know on which DOM element calendar should be built" )
+    @weekDays   = options.weekDays || [ "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi" ]
+    @hourRange  = options.hourRange || [ 7..19 ]
+    @events     = options.events
+    @hourRange  = [ options.timelapse.start..options.timelapse.end ] if options.timelapse
 
-$.fn.planning = ( options ) ->
-  events    = options.events
-  weekDays  = options.days if options.days
-  hourRange = [ options.timelapse.start..options.timelapse.end ] if options.timelapse
+    @table        = null
+    @cell         = null
+    @hiddenEvents = {}
 
-  createPlanning()
-  drawEvents()
+    # create calendar
+    @createPlanning()
+    @drawEvents()
 
-tableTemplate = """
-<table class="table table-bordered">
-  <thead>
-  </thead>
-  <tbody>
-  </tbody>
-</table>
-"""
+  createPlanning: =>
+    planningNode = $( @node )
 
-$.fn.toggleEvents = ( eventName ) ->
-  hideEvents[ eventName ] = !hideEvents[ eventName ]
-  $( ".event" ).remove()
-  drawEvents()
+    # create table
+    planningNodes.html WeekPlanning._tableTemplate
+    @table = $( planningNodes, 'table' )
 
+    tableHead = @table.find( 'thead' )
+    tableBody = @table.find( 'tbody' )
 
-createPlanning = ->
-  planningNodes = $( '#week_planning' )
+    tableHead.html '<tr class="day-names"><th class="col-md-1"></th></tr>'
 
-  # create table
-  planningNodes.html tableTemplate
-  table = $( planningNodes, 'table' )
+    # fill days
+    weekDaysLength = @weekDays.length
+    colMd = Math.floor( 12 / weekDaysLength )
+    for day in @weekDays
+      tableHead.find('tr').append "<th class='col-md-#{colMd} text-center'>#{day}</th>"
 
-  tableHead = table.find( 'thead' )
-  tableBody = table.find( 'tbody' )
+    # fill hours
+    for hour in @hourRange
+      tableBody.append """
+  <tr class=\'hour hour-#{hour}\'>
+    <td class='hour-name'>
+      #{hour}:00
+    </td>
+    #{for name, index in @weekDays
+      "<td class=\'day day-#{index}\'>
+        <div>&nbsp;</div>
+        <div>&nbsp;</div>
+      </td>"}
+  </tr>
+  """
 
-  tableHead = table.find( 'thead' )
-  tableHead.html '<tr class="day-names"><th class="col-md-1"></th></tr>'
+    # get cell informations
+    td = $("tbody td.day-0").first()
+    @cell =
+      height: td.height()
+      width:  td.width()
 
-  # fill days
-  weekDaysLength = weekDays.length
-  colMd = Math.floor( 12 / weekDaysLength )
-  for day in weekDays
-    tableHead.find('tr').append "<th class='col-md-#{colMd} text-center'>#{day}</th>"
+  drawEvents: ->
+    for event in @events
+      unless @hiddenEvents[ event.name ]
+        for time in event.times
+          [ startHour, startMinute  ] = time.start.split ':'
+          [ endHour, endMinute      ] = time.end.split ':'
+          top   = $("tr.hour-#{startHour}").offset().top + @cell.height - 1
+          left  = $("td.day-#{time.day}").first().offset().left + 1
 
-  # fill hours
-  for hour in hourRange
-    tableBody.append """
-<tr class=\'hour hour-#{hour}\'>
-  <td class='hour-name'>
-    #{hour}:00
-  </td>
-  #{for name, index in weekDays
-    "<td class=\'day day-#{index}\'>
-      <div>&nbsp;</div>
-      <div>&nbsp;</div>
-    </td>"}
-</tr>
-"""
+          eventNode = $( "<div class='event'><span class='event-name'>#{event.name}</span><br/>#{time.start} &ndash; #{time.end}</div>" )
 
-  # get cell informations
-  td = $("tbody td.day-0").first()
-  cell =
-    height: td.height()
-    width:  td.width()
+          eventHeight = 0
+          eventHeight += ( parseInt( endHour ) - parseInt( startHour ) ) * @cell.height - 1
+          eventHeight += ( ( (parseInt(endMinute) - parseInt(startMinute) ) / 60 ) * 100 ) * ( @cell.height / 100 ) - 1
 
-drawEvents = ->
-  for event in events
-    unless hideEvents[ event.name ]
-      for time in event.times
-        [ startHour, startMinute  ] = time.start.split ':'
-        [ endHour, endMinute      ] = time.end.split ':'
-        top   = $("tr.hour-#{startHour}").offset().top + cell.height - 1
-        left  = $("td.day-#{time.day}").first().offset().left + 1
+          eventNode
+            .css 'top',             "#{top}px"
+            .css 'left',            "#{left}px"
+            .css 'background-color', event.color
+            .width  @cell.width + 1
+            .height eventHeight
 
-        eventNode = $( "<div class='event'><span class='event-name'>#{event.name}</span><br/>#{time.start} &ndash; #{time.end}</div>" )
+          @table.append eventNode
 
-        eventHeight = 0
-        eventHeight += ( parseInt( endHour ) - parseInt( startHour ) ) * cell.height - 1
-        eventHeight += ( ( (parseInt(endMinute) - parseInt(startMinute) ) / 60 ) * 100 ) * ( cell.height / 100 ) - 1
-
-
-        eventNode
-          .css 'top',             "#{top}px"
-          .css 'left',            "#{left}px"
-          .css 'background-color', event.color
-          .width  cell.width + 1
-          .height eventHeight
-
-        table.append eventNode
+  toggleEvents: ( eventName ) ->
+    @hiddenEvents[ eventName ] = !@hiddenEvents[ eventName ]
+    $( ".event" ).remove()
+    @drawEvents()
