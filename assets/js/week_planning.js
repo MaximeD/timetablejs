@@ -6,22 +6,18 @@
     WeekPlanning._tableTemplate = "<table class=\"table table-bordered\">\n  <thead>\n  </thead>\n  <tbody>\n  </tbody>\n</table>";
 
     function WeekPlanning(node, options) {
-      var events, _i, _ref, _ref1, _results;
-      this.node = node;
+      var _i, _ref, _ref1, _results;
       if (options == null) {
         options = {};
       }
       this.createPlanning = __bind(this.createPlanning, this);
       if (node == null) {
-        throw new Error("Don't know what element to build calendar on");
+        throw new Error("Don't know on which DOM element calendar should be built");
       }
+      this.node = $(node);
       this.weekDays = options.weekDays || ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"];
       this.hourRange = options.hourRange || [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
       this.events = options.events;
-      this.table = null;
-      this.cell = null;
-      this.hiddenEvents = {};
-      events = options.events;
       if (options.timelapse) {
         this.hourRange = (function() {
           _results = [];
@@ -29,22 +25,26 @@
           return _results;
         }).apply(this);
       }
-      this.draw();
+      this.table = null;
+      this.cell = null;
+      this.hiddenEvents = {};
+      this.createPlanning();
+      this.drawEvents();
+      window.addEventListener('resize', (function(_this) {
+        return function() {
+          _this.getCellDimensions();
+          _this.deleteEvents();
+          return _this.drawEvents();
+        };
+      })(this));
     }
 
-    WeekPlanning.prototype.draw = function() {
-      this.createPlanning();
-      return this.drawEvents();
-    };
-
     WeekPlanning.prototype.createPlanning = function() {
-      var colMd, day, hour, index, name, planningNodes, tableBody, tableHead, td, weekDaysLength, _i, _j, _len, _len1, _ref, _ref1;
-      planningNodes = $(this.node);
-      planningNodes.html(WeekPlanning._tableTemplate);
-      this.table = $(planningNodes, 'table');
+      var colMd, day, hour, index, name, tableBody, tableHead, weekDaysLength, _i, _j, _len, _len1, _ref, _ref1;
+      this.node.html(WeekPlanning._tableTemplate);
+      this.table = $(this.node, 'table');
       tableHead = this.table.find('thead');
       tableBody = this.table.find('tbody');
-      tableHead = this.table.find('thead');
       tableHead.html('<tr class="day-names"><th class="col-md-1"></th></tr>');
       weekDaysLength = this.weekDays.length;
       colMd = Math.floor(12 / weekDaysLength);
@@ -67,6 +67,11 @@
           return _results;
         }).call(this)) + "\n</tr>");
       }
+      return this.getCellDimensions();
+    };
+
+    WeekPlanning.prototype.getCellDimensions = function() {
+      var td;
       td = $("tbody td.day-0").first();
       return this.cell = {
         height: td.height(),
@@ -107,9 +112,13 @@
       return _results;
     };
 
+    WeekPlanning.prototype.deleteEvents = function() {
+      return $(".event").remove();
+    };
+
     WeekPlanning.prototype.toggleEvents = function(eventName) {
       this.hiddenEvents[eventName] = !this.hiddenEvents[eventName];
-      $(".event").remove();
+      this.deleteEvents();
       return this.drawEvents();
     };
 

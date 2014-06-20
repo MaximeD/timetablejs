@@ -8,9 +8,10 @@ class window.WeekPlanning
   </table>
   """
 
-  constructor: ( @node, options = {} ) ->
-    unless @node?
+  constructor: ( node, options = {} ) ->
+    unless node?
       throw new Error( "Don't know on which DOM element calendar should be built" )
+    @node       = $( node )
     @weekDays   = options.weekDays || [ "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi" ]
     @hourRange  = options.hourRange || [ 7..19 ]
     @events     = options.events
@@ -24,12 +25,15 @@ class window.WeekPlanning
     @createPlanning()
     @drawEvents()
 
-  createPlanning: =>
-    planningNode = $( @node )
+    window.addEventListener 'resize', =>
+      @getCellDimensions()
+      @deleteEvents()
+      @drawEvents()
 
+  createPlanning: =>
     # create table
-    planningNodes.html WeekPlanning._tableTemplate
-    @table = $( planningNodes, 'table' )
+    @node.html WeekPlanning._tableTemplate
+    @table = $( @node, 'table' )
 
     tableHead = @table.find( 'thead' )
     tableBody = @table.find( 'tbody' )
@@ -57,6 +61,9 @@ class window.WeekPlanning
   </tr>
   """
 
+    @getCellDimensions()
+
+  getCellDimensions: ->
     # get cell informations
     td = $("tbody td.day-0").first()
     @cell =
@@ -87,7 +94,10 @@ class window.WeekPlanning
 
           @table.append eventNode
 
+  deleteEvents: ->
+    $( ".event" ).remove()
+
   toggleEvents: ( eventName ) ->
     @hiddenEvents[ eventName ] = !@hiddenEvents[ eventName ]
-    $( ".event" ).remove()
+    @deleteEvents()
     @drawEvents()
