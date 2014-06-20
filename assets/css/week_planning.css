@@ -1,3 +1,7 @@
+table {
+  table-layout: fixed;
+}
+
 thead,tr.hour{
   //height: 50px;
 }
@@ -25,6 +29,7 @@ tr.hour td div:nth-child(n+2) {
 .event{
   text-align: center;
   position:   absolute;
+  overflow:   hidden;
 }
 
 .event .event-name {
