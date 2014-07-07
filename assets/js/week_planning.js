@@ -85,7 +85,7 @@
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         event = _ref[_i];
-        if (!this.hiddenEvents[event.name]) {
+        if (!this.hiddenEvents[event.id]) {
           _results.push((function() {
             var _j, _len1, _ref1, _ref2, _ref3, _results1;
             _ref1 = event.times;
