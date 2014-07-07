@@ -72,7 +72,7 @@ class window.WeekPlanning
 
   drawEvents: ->
     for event in @events
-      unless @hiddenEvents[ event.name ]
+      unless @hiddenEvents[ event.id ]
         for time in event.times
           [ startHour, startMinute  ] = time.start.split ':'
           [ endHour, endMinute      ] = time.end.split ':'
