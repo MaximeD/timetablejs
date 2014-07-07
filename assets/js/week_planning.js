@@ -80,7 +80,7 @@
     };
 
     WeekPlanning.prototype.drawEvents = function() {
-      var endHour, endMinute, event, eventHeight, eventNode, left, startHour, startMinute, time, top, _i, _len, _ref, _results;
+      var dayElement, endHour, endMinute, event, eventHeight, eventNode, hourElement, left, startHour, startMinute, time, top, _i, _len, _ref, _results;
       _ref = this.events;
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -94,8 +94,10 @@
               time = _ref1[_j];
               _ref2 = time.start.split(':'), startHour = _ref2[0], startMinute = _ref2[1];
               _ref3 = time.end.split(':'), endHour = _ref3[0], endMinute = _ref3[1];
-              top = $("tr.hour-" + startHour).offset().top + this.cell.height - 1;
-              left = $("td.day-" + time.day).first().offset().left + 1;
+              hourElement = $("tr.hour-" + startHour);
+              dayElement = $("td.day-" + time.day).first();
+              top = hourElement.offset().top + this.cell.height - 1 - hourElement.offsetParent().offset().top;
+              left = dayElement.offset().left + 1 - dayElement.offsetParent().offset().left;
               eventNode = $("<div class='event'><span class='event-name'>" + event.name + "</span><br/>" + time.start + " &ndash; " + time.end + "</div>");
               eventHeight = 0;
               eventHeight += (parseInt(endHour) - parseInt(startHour)) * this.cell.height - 1;
