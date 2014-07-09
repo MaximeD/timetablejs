@@ -4,7 +4,7 @@ class window.Timetable
     unless node?
       throw new Error( "Don't know on which DOM element calendar should be built" )
     @node       = $( node )
-    @weekDays   = options.weekDays || [ "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi" ]
+    @weekDays   = options.dayNames || [ "Monday", "Tuesday", "Wednesday", "Thursday", "Friday" ]
     @hourRange  = options.hourRange || [ 7..19 ]
     @events     = options.events
     @hourRange  = [ options.timelapse.start..options.timelapse.end ] if options.timelapse
