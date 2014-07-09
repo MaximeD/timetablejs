@@ -1,4 +1,4 @@
-class window.WeekPlanning
+class window.Timetable
 
   constructor: ( node, options = {} ) ->
     unless node?
@@ -86,7 +86,7 @@ class window.WeekPlanning
     @drawEvents()
 
 
-class Templates extends WeekPlanning
+class Templates extends Timetable
   @table: _.template """
   <table class="table table-bordered">
     <thead>

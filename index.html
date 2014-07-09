@@ -3,20 +3,20 @@
 
   <head>
     <meta charset="utf-8">
-    <title>Week Planning</title>
+    <title>Timetable</title>
 
-    <meta name="description" content="Javascript plugin to create week planning">
+    <meta name="description" content="Javascript plugin to create timetables">
     <meta name="author" content="Maxime Demolin">
 
     <link rel="shortcut icon" href="favicon.ico">
 
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/week_planning.css">
+    <link rel="stylesheet" href="assets/css/timetable.css">
 
     <script src="assets/js/jquery-1.11.1.min.js"></script>
     <script src="assets/js/bootstrap.min.js"></script>
     <script src="assets/js/underscore-min.js"></script>
-    <script src="assets/js/week_planning.js"></script>
+    <script src="assets/js/timetable.js"></script>
 
   </head>
 
@@ -25,9 +25,9 @@
     <div class="container">
       <div class='row'>
         <div class="col-md-10 col-md-offset-1">
-          <h1>Week Planning</h1>
+          <h1>Timetable</h1>
 
-          <div id="week_planning" />
+          <div id="timetable" />
         </div>
       </div>
     </div>
@@ -35,7 +35,7 @@
     <script>
       planning = {};
       $( document ).ready(function() {
-        planning = new WeekPlanning( '#week_planning', {
+        planning = new Timetable( '#timetable', {
           dayNames:   [ "Monday", "Tuesday", "Wednesday", "Thursday", "Friday" ],
           timelapse:  {
             start:  10,

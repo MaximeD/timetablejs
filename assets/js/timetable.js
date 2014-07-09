@@ -5,8 +5,8 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  window.WeekPlanning = (function() {
-    function WeekPlanning(node, options) {
+  window.Timetable = (function() {
+    function Timetable(node, options) {
       var _i, _ref, _ref1, _results;
       if (options == null) {
         options = {};
@@ -40,7 +40,7 @@
       })(this));
     }
 
-    WeekPlanning.prototype.createPlanning = function() {
+    Timetable.prototype.createPlanning = function() {
       var colMd, day, hour, tableBody, tableHead, weekDaysLength, _i, _j, _len, _len1, _ref, _ref1;
       this.node.html(Templates.table());
       this.table = $(this.node, 'table');
@@ -68,7 +68,7 @@
       return this.getCellDimensions();
     };
 
-    WeekPlanning.prototype.getCellDimensions = function() {
+    Timetable.prototype.getCellDimensions = function() {
       var td;
       td = $("tbody td.day-0").first();
       return this.cell = {
@@ -77,7 +77,7 @@
       };
     };
 
-    WeekPlanning.prototype.drawEvents = function() {
+    Timetable.prototype.drawEvents = function() {
       var dayElement, endHour, endMinute, event, eventHeight, eventNode, hourElement, left, startHour, startMinute, time, top, _i, _len, _ref, _results;
       _ref = this.events;
       _results = [];
@@ -117,17 +117,17 @@
       return _results;
     };
 
-    WeekPlanning.prototype.deleteEvents = function() {
+    Timetable.prototype.deleteEvents = function() {
       return $(".event").remove();
     };
 
-    WeekPlanning.prototype.toggleEvents = function(eventName) {
+    Timetable.prototype.toggleEvents = function(eventName) {
       this.hiddenEvents[eventName] = !this.hiddenEvents[eventName];
       this.deleteEvents();
       return this.drawEvents();
     };
 
-    return WeekPlanning;
+    return Timetable;
 
   })();
 
@@ -150,6 +150,6 @@
 
     return Templates;
 
-  })(WeekPlanning);
+  })(Timetable);
 
 }).call(this);
