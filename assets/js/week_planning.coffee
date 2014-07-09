@@ -1,12 +1,4 @@
 class window.WeekPlanning
-  @_tableTemplate = """
-  <table class="table table-bordered">
-    <thead>
-    </thead>
-    <tbody>
-    </tbody>
-  </table>
-  """
 
   constructor: ( node, options = {} ) ->
     unless node?
@@ -32,34 +24,23 @@ class window.WeekPlanning
 
   createPlanning: =>
     # create table
-    @node.html WeekPlanning._tableTemplate
+    @node.html Templates.table()
     @table = $( @node, 'table' )
 
     tableHead = @table.find( 'thead' )
     tableBody = @table.find( 'tbody' )
 
-    tableHead.html '<tr class="day-names"><th class="col-md-1"></th></tr>'
+    tableHead.html Templates.tableHead()
 
     # fill days
     weekDaysLength = @weekDays.length
     colMd = Math.floor( 12 / weekDaysLength )
     for day in @weekDays
-      tableHead.find('tr').append "<th class='col-md-#{colMd} text-center'>#{day}</th>"
+      tableHead.find('tr').append Templates.tableTh( colMd: colMd, day: day )
 
     # fill hours
     for hour in @hourRange
-      tableBody.append """
-  <tr class=\'hour hour-#{hour}\'>
-    <td class='hour-name'>
-      #{hour}:00
-    </td>
-    #{for name, index in @weekDays
-      "<td class=\'day day-#{index}\'>
-        <div>&nbsp;</div>
-        <div>&nbsp;</div>
-      </td>"}
-  </tr>
-  """
+      tableBody.append Templates.tableTr( hour: hour, days: @weekDays )
 
     @getCellDimensions()
 
@@ -81,10 +62,7 @@ class window.WeekPlanning
           top   = hourElement.offset().top + @cell.height - 1 - hourElement.offsetParent().offset().top
           left  = dayElement.offset().left + 1 - dayElement.offsetParent().offset().left
 
-          eventHtml = "<div class='event'><div class='event-name'>#{event.name}</div>"
-          eventHtml += "<div class='event-comment'>#{event.comment}</div>" if event.comment?
-          eventHtml += "<div class='event-duration'>#{time.start} &ndash; #{time.end}</div></div>"
-          eventNode = $( eventHtml )
+          eventNode = $( Templates.event( name: event.name, comment: event.comment, start: time.start, end: time.end) )
 
           eventHeight = 0
           eventHeight += ( parseInt( endHour ) - parseInt( startHour ) ) * @cell.height - 1
@@ -106,3 +84,42 @@ class window.WeekPlanning
     @hiddenEvents[ eventName ] = !@hiddenEvents[ eventName ]
     @deleteEvents()
     @drawEvents()
+
+
+class Templates extends WeekPlanning
+  @table: _.template """
+  <table class="table table-bordered">
+    <thead>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+  """
+
+  @tableHead: _.template '<tr class="day-names"><th class="col-md-1"></th></tr>'
+
+  @tableTh: _.template "<th class='col-md-<%= colMd %> text-center'><%= day %></th>"
+
+  @tableTr: _.template """
+  <tr class="hour hour-<%= hour %>">
+    <td class='hour-name'>
+      <%= hour %>:00
+    </td>
+    <% _.each( days, function( name, index ) { %>
+      <td class="day day-<%= index %>">
+        <div>&nbsp;</div>
+        <div>&nbsp;</div>
+      </td>
+      <% }); %>
+  </tr>
+  """
+
+  @event: _.template """
+    <div class='event'>
+      <div class='event-name'><%= name %></div>
+      <% if ( comment ) { %>
+        <div class='event-comment'><%= comment %></div>
+      <% } %>
+      <div class='event-duration'><%= start %>&nbsp;&ndash;&nbsp;<%= end %></div>
+    </div>
+    """
