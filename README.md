@@ -28,4 +28,4 @@ $( document ).ready(function() {
 ```
 
 
-See `examples/` for a working example.
+[See it online](http://maximed.github.io/timetablejs/) for a working example.
