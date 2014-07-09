@@ -16,7 +16,7 @@
         throw new Error("Don't know on which DOM element calendar should be built");
       }
       this.node = $(node);
-      this.weekDays = options.weekDays || ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"];
+      this.weekDays = options.dayNames || ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
       this.hourRange = options.hourRange || [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
       this.events = options.events;
       if (options.timelapse) {
