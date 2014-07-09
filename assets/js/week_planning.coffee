@@ -81,7 +81,10 @@ class window.WeekPlanning
           top   = hourElement.offset().top + @cell.height - 1 - hourElement.offsetParent().offset().top
           left  = dayElement.offset().left + 1 - dayElement.offsetParent().offset().left
 
-          eventNode = $( "<div class='event'><span class='event-name'>#{event.name}</span><br/>#{time.start} &ndash; #{time.end}</div>" )
+          eventHtml = "<div class='event'><div class='event-name'>#{event.name}</div>"
+          eventHtml += "<div class='event-comment'>#{event.comment}</div>" if event.comment?
+          eventHtml += "<div class='event-duration'>#{time.start} &ndash; #{time.end}</div></div>"
+          eventNode = $( eventHtml )
 
           eventHeight = 0
           eventHeight += ( parseInt( endHour ) - parseInt( startHour ) ) * @cell.height - 1
