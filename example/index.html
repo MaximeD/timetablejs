@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title>Timetable</title>
+
+    <meta name="description" content="Javascript plugin to create timetables">
+    <meta name="author" content="Maxime Demolin">
+
+    <link rel="shortcut icon" href="favicon.ico">
+
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/css/timetable.css">
+
+    <script src="../assets/js/jquery-1.11.1.min.js"></script>
+    <script src="../assets/js/bootstrap.min.js"></script>
+    <script src="../assets/js/underscore-min.js"></script>
+    <script src="../assets/js/timetable.js"></script>
+
+    <script src="timetable.js"></script>
+
+  </head>
+
+
+  <body>
+    <div class="container">
+      <div class='row'>
+        <div class="col-md-10 col-md-offset-1">
+          <h1>Timetable</h1>
+
+          <div id="timetable"></div>
+
+
+          <h3>Display:</h3>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" onclick="timetable.toggleEvents( 'reading' )" checked> reading
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" onclick="timetable.toggleEvents( 'coffee' )" checked> coffee
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" onclick="timetable.toggleEvents( 'lunch' )" checked> lunch break
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" onclick="timetable.toggleEvents( 'sport' )" checked> sport
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </body>
+
+</html>
