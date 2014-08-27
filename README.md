@@ -27,5 +27,25 @@ $( document ).ready(function() {
 }
 ```
 
+Events should be an array where each event has the following form:
+
+```
+{
+  name:     "name of your event",
+  comment:  "an optional comment",
+  other:    "optional other informations that will only be displayed in tooltip",
+  id:       "uniq identifier, can be a string",
+  color:    "the color you wish your event to be displayed",
+  times:  [                                     // array of time where event is repeated
+    {
+      day:    "day number, starts from 0",
+      start:  "starting time, format HH:MM",
+      end:    "ending time, format HH:MM"
+    },
+    ...
+  ]
+},
+...
+```
 
 [See it online](http://maximed.github.io/timetablejs/) for a working example.
