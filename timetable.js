@@ -75,6 +75,7 @@ $( document ).ready(function() {
 
       {
         name:     "Reading",
+        other:    "Grab a book it's good for you",
         id:       "reading",
         color:    "#65a593",
         times:  [

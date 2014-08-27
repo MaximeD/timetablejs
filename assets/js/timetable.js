@@ -30,12 +30,12 @@
       this.cell = null;
       this.hiddenEvents = {};
       this.createPlanning();
-      this.drawEvents();
+      this.drawEvents(options['tooltip']);
       window.addEventListener('resize', (function(_this) {
         return function() {
           _this.getCellDimensions();
           _this.deleteEvents();
-          return _this.drawEvents();
+          return _this.drawEvents(options['tooltip']);
         };
       })(this));
     }
@@ -77,8 +77,11 @@
       };
     };
 
-    Timetable.prototype.drawEvents = function() {
+    Timetable.prototype.drawEvents = function(tooltip) {
       var dayElement, endHour, endMinute, event, eventHeight, eventNode, hourElement, left, startHour, startMinute, time, top, _i, _len, _ref, _results;
+      if (tooltip == null) {
+        tooltip = true;
+      }
       _ref = this.events;
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -106,6 +109,19 @@
               eventHeight += (parseInt(endHour) - parseInt(startHour)) * this.cell.height - 1;
               eventHeight += (((parseInt(endMinute) - parseInt(startMinute)) / 60) * 100) * (this.cell.height / 100) - 1;
               eventNode.css('top', "" + top + "px").css('left', "" + left + "px").css('background-color', event.color).width(this.cell.width + 1).height(eventHeight);
+              if (tooltip) {
+                eventNode.tooltip({
+                  html: true,
+                  trigger: 'hover',
+                  title: Templates.eventTooltip({
+                    name: event.name,
+                    comment: event.comment,
+                    other: event.other,
+                    start: time.start,
+                    end: time.end
+                  })
+                });
+              }
               _results1.push(this.table.append(eventNode));
             }
             return _results1;
@@ -147,6 +163,8 @@
     Templates.tableTr = _.template("<tr class=\"hour hour-<%= hour %>\">\n  <td class='hour-name'>\n    <%= hour %>:00\n  </td>\n  <% _.each( days, function( name, index ) { %>\n    <td class=\"day day-<%= index %>\">\n      <div>&nbsp;</div>\n      <div>&nbsp;</div>\n    </td>\n    <% }); %>\n</tr>");
 
     Templates.event = _.template("<div class='event'>\n  <div class='event-name'><%= name %></div>\n  <% if ( comment ) { %>\n    <div class='event-comment'><%= comment %></div>\n  <% } %>\n  <div class='event-duration'><%= start %>&nbsp;&ndash;&nbsp;<%= end %></div>\n</div>");
+
+    Templates.eventTooltip = _.template("<div>\n  <div><b><%= name %></b></div>\n  <% if ( comment ) { %>\n    <div><i><%= comment %></i></div>\n  <% } %>\n  <% if ( other ) { %>\n    <div><%= other %></div>\n  <% } %>\n  <div><%= start %>&nbsp;&ndash;&nbsp;<%= end %></div>\n</div>");
 
     return Templates;
 

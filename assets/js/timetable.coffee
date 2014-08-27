@@ -15,12 +15,12 @@ class window.Timetable
 
     # create calendar
     @createPlanning()
-    @drawEvents()
+    @drawEvents( options[ 'tooltip' ] )
 
     window.addEventListener 'resize', =>
       @getCellDimensions()
       @deleteEvents()
-      @drawEvents()
+      @drawEvents( options[ 'tooltip' ] )
 
   createPlanning: =>
     # create table
@@ -51,7 +51,7 @@ class window.Timetable
       height: td.height()
       width:  td.width()
 
-  drawEvents: ->
+  drawEvents: ( tooltip = true ) ->
     for event in @events
       unless @hiddenEvents[ event.id ]
         for time in event.times
@@ -74,6 +74,12 @@ class window.Timetable
             .css 'background-color', event.color
             .width  @cell.width + 1
             .height eventHeight
+
+          if tooltip
+            eventNode.tooltip
+              html:     true,
+              trigger:  'hover',
+              title:    Templates.eventTooltip( name: event.name, comment: event.comment, other: event.other, start: time.start, end: time.end )
 
           @table.append eventNode
 
@@ -121,5 +127,18 @@ class Templates extends Timetable
         <div class='event-comment'><%= comment %></div>
       <% } %>
       <div class='event-duration'><%= start %>&nbsp;&ndash;&nbsp;<%= end %></div>
+    </div>
+    """
+
+  @eventTooltip: _.template """
+    <div>
+      <div><b><%= name %></b></div>
+      <% if ( comment ) { %>
+        <div><i><%= comment %></i></div>
+      <% } %>
+      <% if ( other ) { %>
+        <div><%= other %></div>
+      <% } %>
+      <div><%= start %>&nbsp;&ndash;&nbsp;<%= end %></div>
     </div>
     """
