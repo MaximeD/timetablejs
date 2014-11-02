@@ -45,7 +45,6 @@ class window.Timetable
     @getCellDimensions()
 
   getCellDimensions: ->
-    # get cell informations
     td = $("tbody td.day-0").first()
     @cell =
       height: td.height()
@@ -60,6 +59,8 @@ class window.Timetable
           hourElement = $("tr.hour-#{startHour}")
           dayElement  = $("td.day-#{time.day}").first()
           top   = hourElement.offset().top + @cell.height - 1 - hourElement.offsetParent().offset().top
+          top  += @cell.height * ( parseInt( startMinute ) / 60 ) # minutes offset
+          top  -= @cell.height / 2                                # hour mark is on middle of cell
           left  = dayElement.offset().left + 1 - dayElement.offsetParent().offset().left
 
           eventNode = $( Templates.event( name: event.name, comment: event.comment, start: time.start, end: time.end) )

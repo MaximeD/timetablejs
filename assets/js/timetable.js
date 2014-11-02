@@ -97,7 +97,7 @@
               _ref3 = time.end.split(':'), endHour = _ref3[0], endMinute = _ref3[1];
               hourElement = $("tr.hour-" + startHour);
               dayElement = $("td.day-" + time.day).first();
-              top = hourElement.offset().top + this.cell.height - 1 - hourElement.offsetParent().offset().top;
+              top = hourElement.offset().top + this.cell.height - 1 - hourElement.offsetParent().offset().top + this.cell.height * (parseInt(startMinute) / 60) - this.cell.height / 2;
               left = dayElement.offset().left + 1 - dayElement.offsetParent().offset().left;
               eventNode = $(Templates.event({
                 name: event.name,
