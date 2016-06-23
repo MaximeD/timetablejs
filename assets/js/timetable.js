@@ -70,7 +70,7 @@
 
     Timetable.prototype.getCellDimensions = function() {
       var td;
-      td = $("tbody td.day-0").first();
+      td = this.table.find("tbody td.day-0").first();
       return this.cell = {
         height: td.height(),
         width: td.width()
@@ -95,9 +95,11 @@
               time = _ref1[_j];
               _ref2 = time.start.split(':'), startHour = _ref2[0], startMinute = _ref2[1];
               _ref3 = time.end.split(':'), endHour = _ref3[0], endMinute = _ref3[1];
-              hourElement = $("tr.hour-" + startHour);
-              dayElement = $("td.day-" + time.day).first();
-              top = hourElement.offset().top + this.cell.height - 1 - hourElement.offsetParent().offset().top + this.cell.height * (parseInt(startMinute) / 60) - this.cell.height / 2;
+              hourElement = this.table.find("tr.hour-" + startHour);
+              dayElement = this.table.find("td.day-" + time.day).first();
+              top = hourElement.offset().top + this.cell.height - 1 - hourElement.offsetParent().offset().top;
+              top += this.cell.height * (parseInt(startMinute) / 60);
+              top -= this.cell.height / 2;
               left = dayElement.offset().left + 1 - dayElement.offsetParent().offset().left;
               eventNode = $(Templates.event({
                 name: event.name,
@@ -134,7 +136,7 @@
     };
 
     Timetable.prototype.deleteEvents = function() {
-      return $(".event").remove();
+      return this.table.find(".event").remove();
     };
 
     Timetable.prototype.toggleEvents = function(eventName) {

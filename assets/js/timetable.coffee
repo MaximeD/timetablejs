@@ -45,7 +45,7 @@ class window.Timetable
     @getCellDimensions()
 
   getCellDimensions: ->
-    td = $("tbody td.day-0").first()
+    td = @table.find("tbody td.day-0").first()
     @cell =
       height: td.height()
       width:  td.width()
@@ -56,8 +56,8 @@ class window.Timetable
         for time in event.times
           [ startHour, startMinute  ] = time.start.split ':'
           [ endHour, endMinute      ] = time.end.split ':'
-          hourElement = $("tr.hour-#{startHour}")
-          dayElement  = $("td.day-#{time.day}").first()
+          hourElement = @table.find("tr.hour-#{startHour}")
+          dayElement  = @table.find("td.day-#{time.day}").first()
           top   = hourElement.offset().top + @cell.height - 1 - hourElement.offsetParent().offset().top
           top  += @cell.height * ( parseInt( startMinute ) / 60 ) # minutes offset
           top  -= @cell.height / 2                                # hour mark is on middle of cell
@@ -85,7 +85,7 @@ class window.Timetable
           @table.append eventNode
 
   deleteEvents: ->
-    $( ".event" ).remove()
+    @table.find( ".event" ).remove()
 
   toggleEvents: ( eventName ) ->
     @hiddenEvents[ eventName ] = !@hiddenEvents[ eventName ]
